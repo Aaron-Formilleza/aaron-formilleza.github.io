@@ -30,7 +30,7 @@ const PROJECTS = [
   {
     id: "002",
     title: "NIJISANJI / BRB - Music Video - / ローレン・イロアス",
-    role: "Animation Director / Animator",
+    role: "Designer/Compositor",
     date: "06.2026",
     responsibilities: [
       "Logo Design",
