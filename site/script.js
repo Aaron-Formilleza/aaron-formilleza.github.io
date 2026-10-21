@@ -38,8 +38,8 @@ function createTextList(items) {
 }
 
 function linkLabel(url) {
-  if (/youtu(be\.com|\.be)|vimeo\.com/i.test(url)) return "WATCH FILM ↗";
-  return "VIEW PROJECT ↗";
+  if (/youtu(be\.com|\.be)|vimeo\.com/i.test(url)) return translate("WATCH FILM ↗");
+  return translate("VIEW PROJECT ↗");
 }
 
 function slideshowFigure(project, images, extraClass = "") {
@@ -57,7 +57,7 @@ function slideshowFigure(project, images, extraClass = "") {
           escapeHTML(path) +
           '" alt="' +
           escapeHTML(project.title) +
-          " image " +
+          (language === "ja" ? " 画像 " : " image ") +
           (index + 1) +
           '" loading="eager">',
       )
@@ -181,7 +181,7 @@ function projectMedia(project) {
     return (
       '<div class="project-media media-standard media-curated media-wip">' +
       stillFigure(images[0], project) +
-      '<div class="project-gallery" style="--sample-count:4" aria-label="Work in progress"><span class="wip-label">WORK IN PROGRESS</span>' +
+      '<div class="project-gallery" style="--sample-count:4" aria-label="' + translate("Work in progress") + '"><span class="wip-label">' + translate("WORK IN PROGRESS") + '</span>' +
       images
         .slice(1)
         .map((path) => stillFigure(path, project))
@@ -247,23 +247,23 @@ function projectDetails(project) {
     rows
       .map(
         ([label, value]) =>
-          "<dt>" + label + "</dt><dd>" + formatDetail(label, value) + "</dd>",
+          "<dt>" + translate(label) + "</dt><dd>" + formatDetail(label, value) + "</dd>",
       )
       .join("") +
     (link
-      ? '<dt class="detail-link-label">LINK</dt><dd><a class="project-link" href="' +
+      ? '<dt class="detail-link-label">' + translate("LINK") + '</dt><dd><a class="project-link" href="' +
         escapeHTML(link) +
         '" target="_blank" rel="noopener noreferrer">' +
         linkLabel(link) +
         "</a></dd>"
       : "") +
-    '</dl><dl class="detail-role-period"><dt>ROLE</dt><dd>' +
+    '</dl><dl class="detail-role-period"><dt>' + translate("ROLE") + '</dt><dd>' +
     escapeHTML(project.role) +
-    "</dd><dt>PERIOD</dt><dd>" +
+    "</dd><dt>" + translate("PERIOD") + "</dt><dd>" +
     escapeHTML(period) +
-    '</dd></dl><dl class="detail-responsibilities"><dt>RESPONSIBILITIES</dt><dd>' +
+    '</dd></dl><dl class="detail-responsibilities"><dt>' + translate("RESPONSIBILITIES") + '</dt><dd>' +
     createTextList(project.responsibilities) +
-    '</dd></dl><dl class="detail-software"><dt>SOFTWARE</dt><dd>' +
+    '</dd></dl><dl class="detail-software"><dt>' + translate("SOFTWARE") + '</dt><dd>' +
     createTextList(project.software) +
     "</dd></dl></div>"
   );
@@ -275,13 +275,14 @@ function buildIndex() {
     <a class="index-item" href="#${escapeHTML(project.id)}" data-index="${index}">
       <span>${escapeHTML(project.id)}</span>
       <span class="index-title">${escapeHTML(project.client || project.title.split(/\s*\/\s*/)[0])}</span>
-      <span class="index-date">${escapeHTML(project.date)}</span>
+      <span class="index-date">${escapeHTML(translate(project.date))}</span>
     </a>
   `,
   ).join("");
 }
 
 function projectMarkup(project, classes = "") {
+  project = localizedProject(project);
   const client = project.client || project.title.split(/\s*\/\s*/)[0];
   return `<article class="project-view project-card ${classes}" data-project-id="${escapeHTML(project.id)}"><header class="project-heading"><div class="project-number">${escapeHTML(project.id)}</div><div class="project-client">${escapeHTML(client)}</div></header><div class="project-content">${projectMedia(project)}${projectDetails(project)}</div></article>`;
 }
@@ -580,11 +581,11 @@ function setNameLabels() {
   homeLink.querySelectorAll("[data-name-line]").forEach((button, index) => {
     button.setAttribute(
       "aria-label",
-      introOpen
+      translate(introOpen
         ? index === 0
           ? "Aaron — enter archive"
           : "Formilleza — enter archive"
-        : "Return to introduction",
+        : "Return to introduction"),
     );
   });
 }
@@ -830,7 +831,7 @@ function updateViewerTime() {
       : Date.now(),
   );
   const zone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-  const city = zone.split("/").pop().replaceAll("_", " ").toUpperCase();
+  const city = language === "ja" && zone === "Asia/Tokyo" ? "東京" : zone.split("/").pop().replaceAll("_", " ").toUpperCase();
   const time = new Intl.DateTimeFormat("en-GB", {
     timeZone: zone,
     hour: "2-digit",
@@ -851,7 +852,7 @@ function updateViewerTime() {
     viewerTime.setAttribute("aria-label", clockLabel);
   }
   viewerTime.title =
-    zone + (networkClock ? " · synchronized to server time" : " · device time");
+    zone + (language === "ja" ? (networkClock ? " · サーバー時刻と同期" : " · 端末の時刻") : (networkClock ? " · synchronized to server time" : " · device time"));
 }
 
 let clearSampleHighlight = () => {};
@@ -906,7 +907,7 @@ function setupSamplePreview() {
 }
 
 function initialize() {
-  document.title = "Archive by Aaron Formilleza 2026";
+  setupLanguageSwitch();
   buildIndex();
   loadInitialProject();
   setupIntro();

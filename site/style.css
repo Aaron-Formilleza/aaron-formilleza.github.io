@@ -31,6 +31,38 @@
   --peek-height: clamp(48px, 6vh, 72px);
 }
 
+.language-switch {
+  position: fixed;
+  top: 20px;
+  right: var(--page-margin);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--grey);
+  font-size: 13px;
+  font-weight: 700;
+}
+.language-switch button {
+  border: 0;
+  background: transparent;
+  padding: 10px 6px;
+  min-height: 44px;
+  cursor: pointer;
+}
+.language-switch button[aria-pressed="true"],
+.language-switch button:hover { color: var(--black); }
+.language-switch button:focus-visible { outline: 1px solid var(--black); outline-offset: 2px; }
+html[lang="ja"] .project-metadata,
+html[lang="ja"] .artist-bio,
+html[lang="ja"] .intro-discipline {
+  font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+}
+html[lang="ja"] .project-metadata { line-height: 1.35; }
+@media (max-width: 600px) {
+  .language-switch { top: 6px; right: 10px; font-size: 12px; }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
