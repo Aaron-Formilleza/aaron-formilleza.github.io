@@ -408,7 +408,7 @@ const PROJECTS = [
   },
   {
     id: "018",
-    title: "OTSUKA PHARMACEUTICAL / 「夏がはじまる。」",
+    title: "CALORIEMATE / 「夏がはじまる。」",
     role: "Animator",
     date: "08.2021",
     responsibilities: ["Character Animation", "Compositing"],
@@ -422,7 +422,7 @@ const PROJECTS = [
     links: [
       "https://www.youtube.com/watch?v=QvWsAIc5mO8&list=RDQvWsAIc5mO8&start_radio=1",
     ],
-    client: "OTSUKA PHARMACEUTICAL",
+    client: "CALORIEMATE",
     projectTitle: "「夏がはじまる。」",
     period: "June – July 2021",
   },
